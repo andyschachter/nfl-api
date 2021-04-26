@@ -7,6 +7,12 @@ app.get('/teams', (request, response) => {
   return response.send(teams)
 })
 
+app.get('/teams/:id', (request, response) => {
+  const team = teams.find((team) => { return team.id === parseInt(request.params.id) })
+
+  return response.send(team)
+})
+
 app.all('*', (request, response) => {
   return response.sendStatus(404)
 })
