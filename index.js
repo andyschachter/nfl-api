@@ -3,8 +3,8 @@ const teams = require('./teams')
 
 const app = express()
 
-app.get('/Teams', (request, response) => {
-
+app.get('/teams', (request, response) => {
+  return response.send(teams)
 })
 
 app.all('*', (request, response) => {
