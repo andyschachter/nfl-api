@@ -1,17 +1,12 @@
 const express = require('express')
 const teams = require('./teams')
+const { getAllTeams, getTeam } = require('./controller/teams')
 
 const app = express()
 
-app.get('/teams', (request, response) => {
-  return response.send(teams)
-})
+app.get('/teams', getAllTeams)
 
-app.get('/teams/:id', (request, response) => {
-  const team = teams.find((team) => { return team.id === parseInt(request.params.id) })
-
-  return response.send(team)
-})
+app.get('/teams/:id', getTeam)
 
 app.all('*', (request, response) => {
   return response.sendStatus(404)
