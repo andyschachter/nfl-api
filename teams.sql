@@ -1,8 +1,8 @@
-create database nfl;
+CREATE database nfl;
 
-use nfl;
+USE nfl;
 
-create table teams (
+CREATE table teams (
   id INT auto_increment,
   location VARCHAR(255),
   mascot VARCHAR(255),
