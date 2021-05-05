@@ -1,13 +1,15 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const teams = require('./teams')
-const { getAllTeams, getTeam, addNewTeam } = require('./controller/teams')
+// const teams = require('./teams')
+const { getAllTeams, getTeam, addNewTeam, getTeamByDiv } = require('./controller/teams')
 
 const app = express()
 
 app.get('/teams', getAllTeams)
 
 app.get('/teams/:id', getTeam)
+
+app.get('/teams/division/:div', getTeamByDiv)
 
 app.use(bodyParser.json())
 

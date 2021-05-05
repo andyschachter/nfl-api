@@ -1,4 +1,4 @@
-const teams = require('../teams')
+// const teams = require('../teams')
 const models = require('../models')
 
 const getAllTeams = async (request, response) => {
@@ -10,13 +10,22 @@ const getAllTeams = async (request, response) => {
 const getTeam = async (request, response) => {
   const { id } = request.params
 
-  const team = await models.teams.findOne({ where: { id } })
+  const team = await models.teams.findOne({ where: { id } }) ||
+    await models.teams.findAll({ where: { conference: id } })
 
   return response.send(team)
 
   /* const team = teams.find((team) => { return team.id === parseInt(request.params.id) })
 
   return response.send(team)*/
+}
+
+const getTeamByDiv = async (request, response) => {
+  const { div } = request.params
+
+  const team = await models.teams.findAll({ where: { division: div } })
+
+  return response.send(team)
 }
 
 const addNewTeam = async (request, response) => {
@@ -43,5 +52,6 @@ const addNewTeam = async (request, response) => {
 module.exports = {
   getAllTeams,
   getTeam,
-  addNewTeam
+  addNewTeam,
+  getTeamByDiv
 }
