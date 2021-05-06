@@ -5,8 +5,8 @@ const teams = (connection, Sequelize) => {
       location: { type: Sequelize.STRING },
       mascot: { type: Sequelize.STRING },
       abbreviation: { type: Sequelize.STRING },
-      conference: { type: Sequelize.STRING },
-      division: { type: Sequelize.STRING }
+      conference: { type: Sequelize.ENUM('AFC', 'NFC') },
+      division: { type: Sequelize.ENUM('East', 'West', 'North', 'South') }
     }, { paranoid: true })
 }
 
