@@ -13,7 +13,7 @@ const getTeam = async (request, response) => {
   const team = await models.teams.findOne({ where: { id } }) ||
     await models.teams.findAll({ where: { conference: id } })
 
-  return response.send(team)
+  return team ? response.send(team) : response.sendStatus(404) // if there's a team of that #, return that team, if not return error
 
   /* const team = teams.find((team) => { return team.id === parseInt(request.params.id) })
 
