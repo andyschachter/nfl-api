@@ -8,13 +8,16 @@ const getAllTeams = async (request, response) => {
 }
 
 const getTeam = async (request, response) => {
-  const { id } = request.params
+  try {
+    const { id } = request.params
 
-  const team = await models.teams.findOne({ where: { id } }) ||
-    await models.teams.findAll({ where: { conference: id } })
+    const team = await models.teams.findOne({ where: { id } }) ||
+      await models.teams.findAll({ where: { conference: id } })
 
-  return team ? response.send(team) : response.sendStatus(404) // if there's a team of that #, return that team, if not return error
-
+    return team ? response.send(team) : response.sendStatus(404) // if there's a team of that #, return that team, if not return error
+  } catch (error) {
+    return response.status(500).send('Unable to retrieve team, please try again')
+  }
   /* const team = teams.find((team) => { return team.id === parseInt(request.params.id) })
 
   return response.send(team)*/
