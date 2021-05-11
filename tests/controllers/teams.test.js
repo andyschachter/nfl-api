@@ -3,16 +3,32 @@ const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
 const models = require('../../models')
 const { teamsList, singleTeam } = require('../mocks/teams')
-const { describe, it } = require('mocha')
+const { before, afterEach, describe, it } = require('mocha')
 const { getAllTeams, getTeam, addNewTeam, getTeamByDiv } = require('../../controller/teams')
 
 chai.use(sinonChai)
 const { expect } = chai
 
 describe('Teams Controller', () => {
+  let stubbedFindOne
+  let stubbedFindAll
+  let stubbedCreate
+
+  before(() => {
+    stubbedFindOne = sinon.stub(models.teams, 'findOne')
+    stubbedFindAll = sinon.stub(models.teams, 'findAll')
+    stubbedCreate = sinon.stub(models.teams, 'create')
+  })
+
+  afterEach(() => {
+    stubbedFindOne.resetBehavior()
+    stubbedFindAll.resetBehavior()
+    stubbedCreate.resetBehavior()
+  })
+
   describe('Get All Teams', () => {
     it('returns list of all teams in database calling response.send() for the specified list', async () => {
-      const stubbedFindAll = sinon.stub(models.teams, 'findAll').returns(teamsList)
+      stubbedFindAll.returns(teamsList)
       const stubbedSend = sinon.stub()
       const response = { send: stubbedSend }
 
@@ -23,12 +39,13 @@ describe('Teams Controller', () => {
     })
   })
 
-  describe ('Get One Team', () => {
+  describe('Get One Team', () => {
     it('returns one team with a particular id calling response.send() for that provided id', async () => {
       const request = { params: { id: 3 } }
       const stubbedSend = sinon.stub()
       const response = { send: stubbedSend }
-      const stubbedFindOne = sinon.stub(models.teams, 'findOne').returns(singleTeam)
+
+      stubbedFindOne.returns(singleTeam)
 
       await getTeam(request, response)
 
@@ -39,7 +56,7 @@ describe('Teams Controller', () => {
 
   describe('Add New Team', () => {
     it('accepts new team details and saves them as a team in database, returns that new team', async () => {
-      const stubbedCreate = sinon.stub(models.teams, 'create').returns(singleTeam)
+      stubbedCreate.returns(singleTeam)
       const request = { body: singleTeam }
       const stubbedSend = sinon.stub()
       const stubbedStatus = sinon.stub().returns({ send: stubbedSend })
