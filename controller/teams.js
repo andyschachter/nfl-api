@@ -1,4 +1,4 @@
-// const teams = require('../teams')
+const teams = require('../teams')
 const models = require('../models')
 
 const getAllTeams = async (request, response) => {
