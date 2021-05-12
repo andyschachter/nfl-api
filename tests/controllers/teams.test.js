@@ -2,7 +2,7 @@ const chai = require('chai')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
 const models = require('../../models')
-const { teamsList, singleTeam } = require('../mocks/teams')
+const { teamsList, singleTeam, singleNotTeam, singleBadTeam } = require('../mocks/teams')
 const { before, afterEach, describe, it } = require('mocha')
 const { getAllTeams, getTeam, addNewTeam, getTeamByDiv } = require('../../controller/teams')
 
@@ -105,6 +105,33 @@ describe('Teams Controller', () => {
       expect(stubbedCreate).to.have.been.calledWith(singleTeam)
       expect(stubbedStatus).to.have.been.calledWith(201)
       expect(stubbedSend).to.have.been.calledWith(singleTeam)
+    })
+
+    it('returns 400 error when required fields not found', async () => {
+      stubbedCreate.returns('Error')
+      const request = { body: singleNotTeam }
+      const stubbedSend = sinon.stub()
+      const stubbedStatus = sinon.stub().returns({ send: stubbedSend })
+      const response = { status: stubbedStatus }
+
+      await addNewTeam(request, response)
+
+      expect(stubbedStatus).to.have.been.calledWith(400)
+      expect(stubbedSend).to.have.been.calledWith(
+        'The following fields are required: id, location, mascot, abbreviation, conference, division')
+    })
+
+    it('Returns 500 error with message when unable to add new team', async () => {
+      stubbedCreate.throws('Error')
+      const request = { body: singleBadTeam }
+      const stubbedSend = sinon.stub()
+      const stubbedStatus = sinon.stub().returns({ send: stubbedSend })
+      const response = { status: stubbedStatus }
+
+      await addNewTeam(request, response)
+
+      expect(stubbedStatus).to.have.been.calledWith(500)
+      expect(stubbedSend).to.have.been.calledWith('Unable to add new team, please try again')
     })
   })
 })

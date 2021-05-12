@@ -36,24 +36,28 @@ const getTeamByDiv = async (request, response) => {
 }
 
 const addNewTeam = async (request, response) => {
-  const {
-    location, mascot, abbreviation, conference, division
-  } = request.body
+  try {
+    const {
+      location, mascot, abbreviation, conference, division
+    } = request.body
 
-  if (!location || !mascot || !abbreviation || !conference || !division) {
-    return response.status(400)
-      .send('The following fields are required: id, location, mascot, abbreviation, conference, division')
+    if (!location || !mascot || !abbreviation || !conference || !division) {
+      return response.status(400)
+        .send('The following fields are required: id, location, mascot, abbreviation, conference, division')
+    }
+
+    const newTeam = {
+      location, mascot, abbreviation, conference, division
+    }
+
+    const team = await models.teams.create(newTeam)
+
+    // teams.push(newTeam)
+
+    return response.status(201).send(team)
+  } catch (error) {
+    return response.status(500).send('Unable to add new team, please try again')
   }
-
-  const newTeam = {
-    location, mascot, abbreviation, conference, division
-  }
-
-  const team = await models.teams.create(newTeam)
-
-  // teams.push(newTeam)
-
-  return response.status(201).send(team)
 }
 
 module.exports = {

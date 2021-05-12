@@ -22,4 +22,19 @@ const singleTeam = {
   division: 'East'
 }
 
-module.exports = { teamsList, singleTeam }
+const singleNotTeam = {
+  mascot: 'Patriots',
+  abbreviation: 'NE',
+  conference: 'AFC',
+  division: 'East'
+}
+
+const singleBadTeam = {
+  location: 'New England',
+  mascot: 'Patriots',
+  abbreviation: 'NE',
+  conference: 'XFL',
+  division: 'East'
+}
+
+module.exports = { teamsList, singleTeam, singleNotTeam, singleBadTeam }
