@@ -64,6 +64,20 @@ describe('Teams Controller', () => {
       expect(stubbedFindOne).to.have.been.calledWith({ where: { id: 'not-found' } })
       expect(stubbedSendStatus).to.have.been.calledWith(404)
     })
+
+    it('Returns a 500 error with a message', async () => {
+      stubbedFindOne.throws('ERROR')
+      const request = { params: { id: 'error-id' } }
+      const stubbedSend = sinon.stub()
+      const stubbedStatus = sinon.stub().returns({ send: stubbedSend })
+      const response = { status: stubbedStatus}
+
+      await getTeam(request, response)
+
+      expect(stubbedFindOne).to.have.been.calledWith({ where: { id: 'error-id' } })
+      expect(stubbedStatus).to.have.been.calledWith(500)
+      expect(stubbedSend).to.have.been.calledWith('Unable to retrieve team, please try again')
+    })
   })
 
   describe('Add New Team', () => {
