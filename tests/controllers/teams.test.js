@@ -52,6 +52,18 @@ describe('Teams Controller', () => {
       expect(stubbedFindOne).to.have.been.calledWith({ where: { id: 3 } })
       expect(stubbedSend).to.have.been.calledWith(singleTeam)
     })
+
+    it('Returns a 404 error when no team is found', async () => {
+      stubbedFindOne.returns(null)
+      const request = { params: { id: 'not-found' } }
+      const stubbedSendStatus = sinon.stub()
+      const response = { sendStatus: stubbedSendStatus }
+
+      await getTeam(request, response)
+
+      expect(stubbedFindOne).to.have.been.calledWith({ where: { id: 'not-found' } })
+      expect(stubbedSendStatus).to.have.been.calledWith(404)
+    })
   })
 
   describe('Add New Team', () => {
