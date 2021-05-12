@@ -37,6 +37,18 @@ describe('Teams Controller', () => {
       expect(stubbedFindAll).to.have.callCount(1)
       expect(stubbedSend).to.have.been.calledWith(teamsList)
     })
+
+    it('Returns a 500 error with a message', async () => {
+      stubbedFindAll.throws('ERROR')
+      const stubbedSend = sinon.stub()
+      const stubbedStatus = sinon.stub().returns({ send: stubbedSend })
+      const response = { status: stubbedStatus}
+
+      await getAllTeams({}, response)
+
+      expect(stubbedStatus).to.have.been.calledWith(500)
+      expect(stubbedSend).to.have.been.calledWith('Unable to retrieve team list')
+    })
   })
 
   describe('Get One Team', () => {

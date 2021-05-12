@@ -2,9 +2,13 @@ const teams = require('../teams')
 const models = require('../models')
 
 const getAllTeams = async (request, response) => {
-  const teams = await models.teams.findAll()
+  try {
+    const teams = await models.teams.findAll()
 
-  return response.send(teams)
+    return response.send(teams)
+  } catch (error) {
+    return response.status(500).send('Unable to retrieve team list')
+  }
 }
 
 const getTeam = async (request, response) => {
